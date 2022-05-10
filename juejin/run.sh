@@ -14,5 +14,7 @@
 
 # corntabFunc
 PATH=$PATH:/usr/local/bin
-# 休眠随机时间 0 - 9s
+
+echo `date "+begin at %Y-%m-%d %H:%M:%S"` >> log
 python3 index.py >> log
+echo 'finish----------------------------------------' >> log
