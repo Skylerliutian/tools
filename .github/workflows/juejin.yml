@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
   schedule:
-    - corn: '30 8 * * *'
+    - cron: '30 8 * * *'
 
 jobs:
   auto-check-in:
