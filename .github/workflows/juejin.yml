@@ -1,8 +1,9 @@
 name: 'juejin_auto_check_in'
 
 on:
+  push:
   schedule:
-    - cron: '35 13 * * *'
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 jobs:
