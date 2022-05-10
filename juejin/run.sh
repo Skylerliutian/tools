@@ -15,5 +15,4 @@
 # corntabFunc
 PATH=$PATH:/usr/local/bin
 # 休眠随机时间 0 - 9s
-sleep $[$RANDOM%10]
 python3 index.py >> log
