@@ -1,5 +1,41 @@
+from email.header import Header
 import requests
 from config import *
+
+def getPrizeHistoryList():
+    body = {
+        'page_no': 1,
+        'page_size': 5
+    }
+    params = {
+        'aid': AID,
+        'uuid': UUID
+    }
+    r = requests.post(PRIZE_LIST_URL, json=body, params=params, headers=HEADERS)
+    response = r.json()
+    lotteries = response['data']['lotteries']
+    idList = []
+    for l in lotteries:
+        idList.append(l['history_id'])
+    return idList
+
+def dipLucky(his_id):
+    body = {
+        'lottery_history_id': his_id
+    }
+    params = {
+        'aid': AID,
+        'uuid': UUID
+    }
+    r = requests.post(DIP_URL, json=body, params=params, headers=HEADERS)
+    response = r.json()
+    msg = ''
+    if response['err_no'] == 0:
+        data = response['data']
+        dip_value = data['dip_value']
+        total_value = data['total_value']
+        msg += f'沾喜气成功，沾到<b>{dip_value}</b>幸运值，共<b>{total_value}</b>幸运值'
+    return msg
 
 def drawFunc():
     r = requests.post(DRAW_URL, json=CHECK_DATA, headers=HEADERS)
@@ -31,6 +67,12 @@ def checkInFunc():
             msg = f'''签到成功, 今日获得<b>{data['incr_point']}</b>矿石, 总<b>{data['sum_point']}</b>矿石'''
             drawReturn = drawFunc()
             msg += f'''<p>{drawReturn['msg']}</p>'''
+            # 签到成功，沾喜气
+            # 1. 先获取列表
+            historyList = getPrizeHistoryList()
+            # 2. 沾喜气
+            dip_msg = dipLucky(historyList[0])
+            msg += f'<p>{dip_msg}</p>'
     else:
         msg = f'''
             <p>请求失败,{r.status_code}</p>
@@ -51,5 +93,4 @@ def pushResult(msg):
     
 if __name__ == '__main__':
     checkInFunc()
-    # drawFunc()
-
+    # x = getPrizeHistoryList()
