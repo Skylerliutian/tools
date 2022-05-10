@@ -28,3 +28,16 @@ jobs:
       run: |
         cd juejin
         sh run.sh
+
+    - name: Commit
+      run: |
+        git config --global user.email skylert151096@gmail.com
+        git config --global user.name skyler
+        git add .
+        git commit -m"action:`date`"
+        git pull --rebase
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
