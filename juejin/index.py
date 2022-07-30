@@ -71,8 +71,9 @@ def checkInFunc():
             # 1. 先获取列表
             historyList = getPrizeHistoryList()
             # 2. 沾喜气
-            dip_msg = dipLucky(historyList[0])
-            msg += f'<p>{dip_msg}</p>'
+            if len(historyList) > 0:
+                dip_msg = dipLucky(historyList[0])
+                msg += f'<p>{dip_msg}</p>'
     else:
         msg = f'''
             <p>请求失败,{r.status_code}</p>
