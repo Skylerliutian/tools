@@ -24,3 +24,7 @@ DRAW_URL = 'https://api.juejin.cn/growth_api/v1/lottery/draw'
 PRIZE_LIST_URL = 'https://api.juejin.cn/growth_api/v1/lottery_history/global_big'
 
 DIP_URL = 'https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky?'
+
+NOT_COLLECT_BUG_URL = ' https://api.juejin.cn/user_api/v1/bugfix/not_collect?'
+
+COLLECT_BUG_URL = 'https://api.juejin.cn/user_api/v1/bugfix/collect?'

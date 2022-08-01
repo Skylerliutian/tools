@@ -1,5 +1,5 @@
-from email.header import Header
 import requests
+import sys
 from config import *
 
 def getPrizeHistoryList():
@@ -54,7 +54,6 @@ def drawFunc():
         retval['msg'] = '免费抽奖失败'
     return retval
 
-
 def checkInFunc():
     r = requests.post(CEHCK_IN_URL, json=CHECK_DATA, headers=HEADERS)
     msg = ''
@@ -79,19 +78,58 @@ def checkInFunc():
             <p>请求失败,{r.status_code}</p>
             <p>请手动进行签到</p>
         '''
-    pushResult(msg)
+    pushResult('签到结果', msg)
     return
 
-def pushResult(msg):
+def pushResult(title, msg):
     data = {
         'token': PUSH_TOKEN,
-        'title': '签到结果',
+        'title': title,
         'content': msg,
     }
     r = requests.post(PUSH_URL, json=data)
     print('执行结果:',msg)
 
+def getBugList():
+    params = {
+        'aid': AID,
+        'uuid': UUID
+    }
+    r = requests.post(NOT_COLLECT_BUG_URL, json={}, params=params, headers=HEADERS)
+    response = r.json()
+    bugList = response['data']
+    return bugList
+
+def collectBug():
+    params = {
+        'aid': AID,
+        'uuid': UUID
+    }
+    bugs = getBugList()
+    total = 0
+    for bug in bugs:
+        body = {
+            'bug_time': bug['bug_time'],
+            'bug_type': bug['bug_type']
+        }
+        r = requests.post(NOT_COLLECT_BUG_URL, json=body, params=params, headers=HEADERS)
+        response = r.json()
+        if response['err_no'] == 0:
+            total += 1
+    msg = f'''
+        Good Night, skyler, 今日共收取 {total}个bug, 共{len(bugs)}个bug, {len(bugs) - total}个bug收取失败, 可登录掘金查看详情
+    '''
+    pushResult('bugFix', msg)
+    return
+
     
 if __name__ == '__main__':
-    checkInFunc()
+    key = sys.argv[1]
+    if key == 'check':
+
+        checkInFunc()
+    elif key == 'bug':
+        collectBug()
+    else:
+        checkInFunc()
     # x = getPrizeHistoryList()

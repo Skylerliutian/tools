@@ -16,5 +16,5 @@
 PATH=$PATH:/usr/local/bin
 
 echo `date "+begin at %Y-%m-%d %H:%M:%S"` >> log
-python3 index.py check >> log
+python3 index.py bug >> log
 echo 'finish----------------------------------------' >> log
