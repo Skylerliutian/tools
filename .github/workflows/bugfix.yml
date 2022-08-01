@@ -1,9 +1,9 @@
-name: 'juejin_auto_check_in'
+name: 'juejin_auto_collect_bugs'
 
 on:
   push:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: juejin AutoCheckIn
+    - name: juejin BugFix
       run: |
         cd juejin
         sh bugfix.sh
