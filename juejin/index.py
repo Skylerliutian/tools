@@ -112,7 +112,7 @@ def collectBug():
             'bug_time': bug['bug_time'],
             'bug_type': bug['bug_type']
         }
-        r = requests.post(NOT_COLLECT_BUG_URL, json=body, params=params, headers=HEADERS)
+        r = requests.post(COLLECT_BUG_URL, json=body, params=params, headers=HEADERS)
         response = r.json()
         if response['err_no'] == 0:
             total += 1
