@@ -11,12 +11,15 @@ def getPrizeHistoryList():
         'aid': AID,
         'uuid': UUID
     }
-    r = requests.post(PRIZE_LIST_URL, json=body, params=params, headers=HEADERS)
-    response = r.json()
-    lotteries = response['data']['lotteries']
     idList = []
-    for l in lotteries:
-        idList.append(l['history_id'])
+    try:
+        r = requests.post(PRIZE_LIST_URL, json=body, params=params, headers=HEADERS)
+        response = r.json()
+        lotteries = response['data']['lotteries']
+        for l in lotteries:
+            idList.append(l['history_id'])
+    except Exception as e:
+        print(f'error occur in DipLucky {e}')
     return idList
 
 def dipLucky(his_id):
@@ -122,6 +125,13 @@ def collectBug():
     pushResult('bugFix', msg)
     return
 
+def parse_int(s):
+    try:
+        n = int(v)
+    except Exception as e:
+        print("Couldn't parse")
+        print('Reason:', e)
+    return 1
     
 if __name__ == '__main__':
     key = sys.argv[1]
