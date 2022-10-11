@@ -1,6 +1,17 @@
+import os
+import re
 import requests
-import sys
-from config import *
+
+JUEJIN_COOKIE=''
+
+def init_env():
+    env = os.environ.get('JUEJIN_COOKIE') if JUEJIN_COOKIE else 'aid=2608;uuid=7080762933118977575;signature=_02B4Z6wo00f01LFof1wAAIDByaaUWmDjdJixbHvAAE7UuKrnC4Np3gjTiNwhuSmjesjWveCw6zBFSIVFjTMYLD6sSMymm0kmXbTyhyqoV1EHw1ySQMQQdv7tvJqpA.Wy0RuCgxrBrlH4GFMef9;session_id=938812887b7e0d4477e4e72ed8c98dc1;'
+    # print(env)
+    aid = re.findall(r'aid=(.+?);', env)[0]
+    uuid = re.findall(r'uuid=(.+?);', env)[0]
+    signature = re.findall(r'signature=(.+?);', env)[0]
+    sessionid = re.findall(r'session_id=(.+?);', env)[0]
+    return aid, uuid, signature, sessionid
 
 def getPrizeHistoryList():
     body = {
@@ -84,15 +95,6 @@ def checkInFunc():
     pushResult('签到结果', msg)
     return
 
-def pushResult(title, msg):
-    data = {
-        'token': PUSH_TOKEN,
-        'title': title,
-        'content': msg,
-    }
-    r = requests.post(PUSH_URL, json=data)
-    print('执行结果:',msg)
-
 def getBugList():
     params = {
         'aid': AID,
@@ -124,14 +126,25 @@ def collectBug():
     '''
     pushResult('bugFix', msg)
     return
-    
-if __name__ == '__main__':
-    key = sys.argv[1]
-    if key == 'check':
 
-        checkInFunc()
-    elif key == 'bug':
-        collectBug()
-    else:
-        checkInFunc()
-    # x = getPrizeHistoryList()
+if __name__ == '__main__':
+    CEHCK_IN_URL = 'https://api.juejin.cn/growth_api/v1/check_in'
+    DRAW_URL = 'https://api.juejin.cn/growth_api/v1/lottery/draw'
+    PRIZE_LIST_URL = 'https://api.juejin.cn/growth_api/v1/lottery_history/global_big'
+    DIP_URL = 'https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky?'
+    NOT_COLLECT_BUG_URL = ' https://api.juejin.cn/user_api/v1/bugfix/not_collect?'
+    COLLECT_BUG_URL = 'https://api.juejin.cn/user_api/v1/bugfix/collect?'
+    
+    try:
+        AID, UUID, SIGNATURE, SESSIONID = init_env()
+        HEADERS = {
+            'cookie': f'sessionid={SESSIONID}'
+        } 
+        CHECK_DATA = {
+            'aid': AID,
+            'uuid': UUID,
+            '_signature': SIGNATURE,
+        }
+    except:
+        print(f'JUEJIN_COOKIE 不存在，请先添加 JUEJIN_COOKIE\nexport JUEJIN_COOKIE="aid=xx;uuid=xx;signature=xx;session_id=xxx;"')
+        exit(0)

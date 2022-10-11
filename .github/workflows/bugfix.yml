@@ -2,9 +2,9 @@ name: 'juejin_auto_collect_bugs'
 
 on:
   # push:
-  schedule:
-    - cron: '0 12 * * *'
-  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 12 * * *'
+  # workflow_dispatch:
 
 jobs:
   build:
